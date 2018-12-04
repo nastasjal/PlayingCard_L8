@@ -15,16 +15,26 @@ struct PlayingCard: CustomStringConvertible {
     var suit: Suit
     var rank: Rank
     
-    enum Suit {
-        case spades
-        case hearts
-        case clubs
-        case diamonds
+    enum Suit : String,  CustomStringConvertible {
+        var description: String {return rawValue}
+        
+        case spades = "♠️"
+        case hearts = "♥️"
+        case clubs = "♣️"
+        case diamonds = "♦️"
         
         static var all = [Suit.clubs, .diamonds, .hearts, .spades]
     }
     
-    enum Rank {
+    enum Rank : CustomStringConvertible {
+        var description: String {
+            switch self {
+            case .ace: return "A"
+            case .numeric(let pips): return String(pips)
+            case .face(let kind): return kind
+            }
+        }
+        
         case ace
         case face(String)
         case numeric(Int)
