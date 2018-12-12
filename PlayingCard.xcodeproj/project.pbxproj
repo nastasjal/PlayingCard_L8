@@ -15,6 +15,7 @@
 		4D84B1CA21B587FF00B4F3D2 /* PlayingCard​.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D84B1C921B587FF00B4F3D2 /* PlayingCard​.swift */; };
 		4D84B1CC21B5CCD500B4F3D2 /* PlayingCardDeck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D84B1CB21B5CCD500B4F3D2 /* PlayingCardDeck.swift */; };
 		4D84B1CE21B6796100B4F3D2 /* PlayingCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D84B1CD21B6796100B4F3D2 /* PlayingCardView.swift */; };
+		4DF19DFD21C1745300EAA58E /* CardBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF19DFC21C1745300EAA58E /* CardBehavior.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		4D84B1C921B587FF00B4F3D2 /* PlayingCard​.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayingCard​.swift"; sourceTree = "<group>"; };
 		4D84B1CB21B5CCD500B4F3D2 /* PlayingCardDeck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingCardDeck.swift; sourceTree = "<group>"; };
 		4D84B1CD21B6796100B4F3D2 /* PlayingCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingCardView.swift; sourceTree = "<group>"; };
+		4DF19DFC21C1745300EAA58E /* CardBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardBehavior.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 			children = (
 				4D84B1C821B586E900B4F3D2 /* Supporting Files */,
 				4D84B1B821B586A700B4F3D2 /* ViewController.swift */,
+				4DF19DFC21C1745300EAA58E /* CardBehavior.swift */,
 				4D84B1BA21B586A700B4F3D2 /* Main.storyboard */,
 				4D84B1BD21B586AB00B4F3D2 /* Assets.xcassets */,
 				4D84B1C921B587FF00B4F3D2 /* PlayingCard​.swift */,
@@ -157,6 +160,7 @@
 				4D84B1B721B586A700B4F3D2 /* AppDelegate.swift in Sources */,
 				4D84B1CE21B6796100B4F3D2 /* PlayingCardView.swift in Sources */,
 				4D84B1CA21B587FF00B4F3D2 /* PlayingCard​.swift in Sources */,
+				4DF19DFD21C1745300EAA58E /* CardBehavior.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,64 +12,62 @@ class ViewController: UIViewController {
     
     lazy var animator = UIDynamicAnimator(referenceView: view)
     
-    lazy var collisionBehavior: UICollisionBehavior = {
-        let behavior = UICollisionBehavior()
-        behavior.translatesReferenceBoundsIntoBoundary = true
-        animator.addBehavior(behavior)
-        return behavior
-    }()
+    lazy var cardBehavior = CardBehavior(in: animator)
     
-    lazy var itemBehavior: UIDynamicItemBehavior = {
-       let behavior = UIDynamicItemBehavior()
-        behavior.allowsRotation = false
-        behavior.elasticity = 1
-        behavior.resistance = 0
-        animator.addBehavior(behavior)
-        return behavior
-    }()
+    var lastChoosenCardView: PlayingCardView?
     
     var deck = PlayingCardDeck()
     
     @objc func flipCard(_ recognizer: UITapGestureRecognizer) {
         switch recognizer.state {
         case .ended:
-            if let choosenCardView = recognizer.view as? PlayingCardView {
+            if let choosenCardView = recognizer.view as? PlayingCardView , faceUpViews.count < 2 {
+                lastChoosenCardView = choosenCardView
+                cardBehavior.removeItem(choosenCardView)
                 UIView.transition(with: choosenCardView, duration: 0.6, options: .transitionFlipFromLeft, animations: {choosenCardView.isFaceUp = !choosenCardView.isFaceUp}, completion: { finished in
                     if self.faceUpCardViewMatch {
-                        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.6,
-                                                                       delay: 0,
-                                                                       options: [],
-                                                                       animations: {self.faceUpViews.forEach{ $0.transform = CGAffineTransform.identity.scaledBy(x: 3, y: 3)}
-                                                                        
-                        },
-                                                                       completion: {position in
-                                                                        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.75,
-                                                                                                                       delay: 0,
-                                                                                                                       options: [],
-                                                                                                                       animations: {self.faceUpViews.forEach{ $0.transform = CGAffineTransform.identity.scaledBy(x: 0.1, y: 0.1)
-                                                                                                                        $0.alpha = 0
-                                                                                                                        }},
-                                                                                                                       completion: {position in
+                    UIViewPropertyAnimator.runningPropertyAnimator(
+                                                    withDuration: 0.6,
+                                                    delay: 0,
+                                                    options: [],
+                                                    animations: {self.faceUpViews.forEach{ $0.transform = CGAffineTransform.identity.scaledBy(x: 3, y: 3)}},
+                                                    completion: {position in
+                                                        UIViewPropertyAnimator.runningPropertyAnimator(
+                                                            withDuration: 0.75,
+                                                            delay: 0,
+                                                            options: [],
+                                                            animations: {self.faceUpViews.forEach{ $0.transform = CGAffineTransform.identity.scaledBy(x: 0.1, y: 0.1); $0.alpha = 0 }},
+                                                            completion: {position in
+                                                                        self.faceUpViews.forEach{
+                                                                                $0.isHidden = true
+                                                                                $0.alpha = 1
+                                                                                $0.transform = .identity
+                                                                                                }
                                                                                                                         
-                                                                                                                        self.faceUpViews.forEach{
-                                                                         $0.isHidden = true
-                                                                                                                            $0.alpha = 1
-                                                                                                                            $0.transform = .identity
-                                                                                                                        }
-                                                                                                                        
-                                                                        })
-                        })
-                    }
+                                                                        }
+                                                                                                        )
+                                                            }
+                                                                    )
+                                                }
                     else if self.faceUpViews.count == 2 {
+                        if choosenCardView == self.lastChoosenCardView {
                         self.faceUpViews.forEach{ cardView in
-                        UIView.transition(with: cardView,
-                                                                       duration: 0.6,
-                                                                       options: .transitionFlipFromLeft  ,
-                                                                       animations: {cardView.isFaceUp = false}
+                            UIView.transition(with: cardView,
+                                              duration: 0.6,
+                                              options: .transitionFlipFromLeft  ,
+                                              animations: {cardView.isFaceUp = false},
+                                              completion: {finished in
+                                                self.cardBehavior.addItem(cardView)
+                            }
                             )}
-                                                    }
+                        }
+                    } else {
+                        if !choosenCardView.isFaceUp {
+                            self.cardBehavior.addItem(choosenCardView)
+                        }
+                    }
                 }
-                )
+                    )  //
             }
         default:
             break
@@ -82,8 +80,8 @@ class ViewController: UIViewController {
     
     private var faceUpCardViewMatch: Bool {
         return faceUpViews.count == 2 &&
-        faceUpViews[0].rank == faceUpViews[1].rank &&
-        faceUpViews[0].suit == faceUpViews[1].suit
+            faceUpViews[0].rank == faceUpViews[1].rank &&
+            faceUpViews[0].suit == faceUpViews[1].suit
     }
     
     @IBOutlet var cardViews: [PlayingCardView]!
@@ -116,15 +114,9 @@ class ViewController: UIViewController {
             cardView.rank = card.rank.order
             cardView.suit = card.suit.rawValue
             cardView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(flipCard(_:))))
-            collisionBehavior.addItem(cardView)
-            itemBehavior.addItem(cardView)
-            let push = UIPushBehavior(items: [cardView], mode: .instantaneous)
-            push.angle = (2*CGFloat.pi).arc4Random
-            push.magnitude = CGFloat(1) + CGFloat(2).arc4Random
-            push.action = { [unowned push] in
-                push.dynamicAnimator?.removeBehavior(push)
-            }
-            animator.addBehavior(push)
+            cardBehavior.addItem(cardView)
+            
+            
         }
         
     }
@@ -132,7 +124,7 @@ class ViewController: UIViewController {
     
 }
 
-extension Int {
+/*extension Int {
     var arc4Random: Int {
         switch self {
         case 1...Int.max:
@@ -144,7 +136,7 @@ extension Int {
         }
         
     }
-}
+}*/
 
 extension CGFloat {
     var arc4Random: CGFloat {
@@ -152,7 +144,7 @@ extension CGFloat {
         case 1...CGFloat.greatestFiniteMagnitude:
             return CGFloat(arc4random_uniform(UInt32(self)))
         case -CGFloat.greatestFiniteMagnitude..<0:
-            return CGFloat(arc4random_uniform(UInt32(self)))
+            return -CGFloat(arc4random_uniform(UInt32(self)))
         default:
             return 0
         }
