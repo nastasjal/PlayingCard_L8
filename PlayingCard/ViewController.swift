@@ -9,6 +9,25 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    lazy var animator = UIDynamicAnimator(referenceView: view)
+    
+    lazy var collisionBehavior: UICollisionBehavior = {
+        let behavior = UICollisionBehavior()
+        behavior.translatesReferenceBoundsIntoBoundary = true
+        animator.addBehavior(behavior)
+        return behavior
+    }()
+    
+    lazy var itemBehavior: UIDynamicItemBehavior = {
+       let behavior = UIDynamicItemBehavior()
+        behavior.allowsRotation = false
+        behavior.elasticity = 1
+        behavior.resistance = 0
+        animator.addBehavior(behavior)
+        return behavior
+    }()
+    
     var deck = PlayingCardDeck()
     
     @objc func flipCard(_ recognizer: UITapGestureRecognizer) {
@@ -97,6 +116,15 @@ class ViewController: UIViewController {
             cardView.rank = card.rank.order
             cardView.suit = card.suit.rawValue
             cardView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(flipCard(_:))))
+            collisionBehavior.addItem(cardView)
+            itemBehavior.addItem(cardView)
+            let push = UIPushBehavior(items: [cardView], mode: .instantaneous)
+            push.angle = (2*CGFloat.pi).arc4Random
+            push.magnitude = CGFloat(1) + CGFloat(2).arc4Random
+            push.action = { [unowned push] in
+                push.dynamicAnimator?.removeBehavior(push)
+            }
+            animator.addBehavior(push)
         }
         
     }
@@ -104,3 +132,30 @@ class ViewController: UIViewController {
     
 }
 
+extension Int {
+    var arc4Random: Int {
+        switch self {
+        case 1...Int.max:
+            return Int(arc4random_uniform(UInt32(self)))
+        case -Int.max..<0:
+            return Int(arc4random_uniform(UInt32(self)))
+        default:
+            return 0
+        }
+        
+    }
+}
+
+extension CGFloat {
+    var arc4Random: CGFloat {
+        switch self {
+        case 1...CGFloat.greatestFiniteMagnitude:
+            return CGFloat(arc4random_uniform(UInt32(self)))
+        case -CGFloat.greatestFiniteMagnitude..<0:
+            return CGFloat(arc4random_uniform(UInt32(self)))
+        default:
+            return 0
+        }
+        
+    }
+}
