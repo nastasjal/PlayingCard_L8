@@ -30,9 +30,6 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="suit" value="♣️"/>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isFaceUp" value="YES"/>
                                 </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="j82-gm-aTV" appends="YES" id="7m5-ec-FzT"/>
-                                </connections>
                             </view>
                             <view opaque="NO" contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HZw-1k-2rr" customClass="PlayingCardView" customModule="PlayingCard" customModuleProvider="target">
                                 <rect key="frame" x="146" y="65" width="83" height="104"/>
@@ -182,7 +179,6 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="playingCardView" destination="FUf-jn-GpA" id="2Vf-kl-ysu"/>
                         <outletCollection property="cardViews" destination="FUf-jn-GpA" collectionClass="NSMutableArray" id="IKm-jh-3zF"/>
                         <outletCollection property="cardViews" destination="HZw-1k-2rr" collectionClass="NSMutableArray" id="wgy-DM-taV"/>
                         <outletCollection property="cardViews" destination="F9N-PQ-qal" collectionClass="NSMutableArray" id="xLc-Kz-DK7"/>
@@ -198,11 +194,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="j82-gm-aTV">
-                    <connections>
-                        <action selector="flipCard:" destination="BYZ-38-t0r" id="t0N-DU-ksY"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="123.68815592203899"/>
         </scene>
